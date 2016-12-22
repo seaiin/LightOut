@@ -4,6 +4,8 @@ class World:
     def __init__(self, width, height):
         self.width = width
         self.height = height
+        self.state = 'start'
+        self.score = 0
         self.bobby = Bobby(self, 100, 100)
         self.floor = Floor(self, 400, 300)
         self.fog = Fog(self, 100, 100)
@@ -23,9 +25,9 @@ class World:
         elif key == arcade.key.D:
             self.bobby.switch_direction(Bobby.DIR_RIGHT)
 
-    # def on_key_release(self, key, key_modifiers):
-        # if key == arcade.key.W or key == arcade.key.S or key == arcade.key.A or key == arcade.key.D:
-            # self.bobby.switch_direction(Bobby.DIR_STILL)
+    def on_key_release(self, key, key_modifiers):
+        if key == arcade.key.W or key == arcade.key.S or key == arcade.key.A or key == arcade.key.D:
+            self.bobby.switch_direction(Bobby.DIR_STILL)
 
 class Bobby:
     DIR_STILL = 0
@@ -40,20 +42,21 @@ class Bobby:
         self.y = y
         self.speed = 2
         self.angle = 0
+        self.touch_obj = True
         self.direction = Bobby.DIR_STILL
 
     def switch_direction(self, direc):
         self.direction = direc
 
     def animate(self, delta):
-            if self.direction == Bobby.DIR_UP and self.y < 600:
-                self.y = self.y + self.speed
-            elif self.direction == Bobby.DIR_DOWN and self.y > 0:
-                self.y = self.y - self.speed
-            elif self.direction == Bobby.DIR_LEFT and self.x > 0:
-                self.x = self.x - self.speed
-            elif self.direction == Bobby.DIR_RIGHT and self.x < 800:
-                self.x = self.x + self.speed
+        if self.direction == Bobby.DIR_UP and self.y < 600:
+            self.y = self.y + self.speed
+        elif self.direction == Bobby.DIR_DOWN and self.y > 0:
+            self.y = self.y - self.speed
+        elif self.direction == Bobby.DIR_LEFT and self.x > 0:
+            self.x = self.x - self.speed
+        elif self.direction == Bobby.DIR_RIGHT and self.x < 800:
+            self.x = self.x + self.speed
 
 class Floor:
 
@@ -70,7 +73,6 @@ class Bookshelf:
         self.x = x
         self.y = y
         self.angle = 0
-        self.box = [self.x + 15, self.x - 30, self.y + 30, self.y - 30]
 
 class Fog:
 
