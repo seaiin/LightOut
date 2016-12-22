@@ -26,19 +26,24 @@ class SpaceGameWindow(arcade.Window):
         arcade.set_background_color(arcade.color.WHITE)
 
         self.world = World(width, height)
-
         self.bobby_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.bobby)
+        self.wall_sprite = ModelSprite('images/floor.png', model=self.world.wall)
+        self.flog_sprite = ModelSprite('images/flog.png', model=self.world.flog)
 
     def on_draw(self):
         arcade.start_render()
+        self.wall_sprite.draw()
         self.bobby_sprite.draw()
+        self.flog_sprite.draw()
 
     def animate(self, delta):
         self.world.animate(delta)
-        # self.bobby_sprite.set_position(self.world.ship.x, self.world.ship.y)
 
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
+
+    # def on_key_release(self, key, key_modifiers):
+        # self.world.on_key_release(key, key_modifiers)
 
 if __name__ == '__main__':
     window = SpaceGameWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
