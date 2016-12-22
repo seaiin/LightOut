@@ -19,7 +19,7 @@ class ModelSprite(arcade.Sprite):
         self.sync_with_model()
         super().draw()
 
-class SpaceGameWindow(arcade.Window):
+class LightOutWindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
 
@@ -27,14 +27,16 @@ class SpaceGameWindow(arcade.Window):
 
         self.world = World(width, height)
         self.bobby_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.bobby)
-        self.wall_sprite = ModelSprite('images/floor.png', model=self.world.wall)
-        self.flog_sprite = ModelSprite('images/flog.png', model=self.world.flog)
+        self.floor_sprite = ModelSprite('images/floor.png', model=self.world.floor)
+        self.fog_sprite = ModelSprite('images/fog.png', model=self.world.fog)
+        self.bookshelf_sprite = ModelSprite('images/bookshelf.png', model=self.world.bookshelf)
 
     def on_draw(self):
         arcade.start_render()
-        self.wall_sprite.draw()
+        self.floor_sprite.draw()
+        self.bookshelf_sprite.draw()
         self.bobby_sprite.draw()
-        self.flog_sprite.draw()
+        self.fog_sprite.draw()
 
     def animate(self, delta):
         self.world.animate(delta)
@@ -45,6 +47,12 @@ class SpaceGameWindow(arcade.Window):
     # def on_key_release(self, key, key_modifiers):
         # self.world.on_key_release(key, key_modifiers)
 
+    def check_touch(self):
+        if arcade.check_for_collision(self.bobby_sprite, self.bookshelf_sprite):
+            self.world.check_touch = True
+        else:
+            self.world.check_touch = False
+
 if __name__ == '__main__':
-    window = SpaceGameWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
+    window = LightOutWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
     arcade.run()
