@@ -1,7 +1,7 @@
 import arcade
-from models import World, Ship
+from models import World, Bobby
 
-SCREEN_WIDTH = 600
+SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
 class ModelSprite(arcade.Sprite):
@@ -23,19 +23,19 @@ class SpaceGameWindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
 
-        arcade.set_background_color(arcade.color.BLUE)
+        arcade.set_background_color(arcade.color.WHITE)
 
         self.world = World(width, height)
 
-        self.ship_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.ship)
+        self.bobby_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.bobby)
 
     def on_draw(self):
         arcade.start_render()
-        self.ship_sprite.draw()
+        self.bobby_sprite.draw()
 
     def animate(self, delta):
         self.world.animate(delta)
-        # self.ship_sprite.set_position(self.world.ship.x, self.world.ship.y)
+        # self.bobby_sprite.set_position(self.world.ship.x, self.world.ship.y)
 
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
