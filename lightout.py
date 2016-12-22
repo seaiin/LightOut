@@ -27,6 +27,13 @@ class LightOutWindow(arcade.Window):
 
         self.world = World(width, height)
         self.count_key = 5
+        self.time = 0
+        self.start1_sprite = arcade.Sprite('images/start1.png', 1)
+        self.start1_sprite.center_x = width/2
+        self.start1_sprite.center_y = height/2
+        self.start2_sprite = arcade.Sprite('images/start2.png', 1)
+        self.start2_sprite.center_x = width/2
+        self.start2_sprite.center_y = height/2
         self.bobby_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.bobby)
         self.floor_sprite = ModelSprite('images/floor.png', model=self.world.floor)
         self.fog_sprite = ModelSprite('images/fog.png', model=self.world.fog)
@@ -39,17 +46,25 @@ class LightOutWindow(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
-        self.floor_sprite.draw()
-        self.bookshelf_sprite.draw()
-        self.bobby_sprite.draw()
-        self.key_sprite_list.draw()
-        self.fog_sprite.draw()
-        self.key_icon_sprite.draw()
-        arcade.draw_text(str(self.world.score) + " / " + str(self.count_key), 75, 545, arcade.color.WHITE, 15)
+        if self.world.state == 'start':
+            self.start1_sprite.draw()
+            if self.time >= 0.5:
+                self.start2_sprite.draw()
+            if self.time >= 1:
+                self.time = 0
+        elif self.world.state == 'game':
+            self.floor_sprite.draw()
+            self.bookshelf_sprite.draw()
+            self.bobby_sprite.draw()
+            self.key_sprite_list.draw()
+            self.fog_sprite.draw()
+            self.key_icon_sprite.draw()
+            arcade.draw_text(str(self.world.score) + " / " + str(self.count_key), 75, 545, arcade.color.WHITE, 15)
 
     def animate(self, delta):
         self.world.animate(delta)
         self.touch_key()
+        self.time = self.time + delta
 
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)

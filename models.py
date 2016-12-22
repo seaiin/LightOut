@@ -16,18 +16,23 @@ class World:
         self.fog.animate(delta)
 
     def on_key_press(self, key, key_modifiers):
-        if key == arcade.key.W:
-            self.bobby.switch_direction(Bobby.DIR_UP)
-        elif key == arcade.key.S:
-            self.bobby.switch_direction(Bobby.DIR_DOWN)
-        elif key == arcade.key.A:
-            self.bobby.switch_direction(Bobby.DIR_LEFT)
-        elif key == arcade.key.D:
-            self.bobby.switch_direction(Bobby.DIR_RIGHT)
+        if self.state == 'start':
+            if key == arcade.key.SPACE:
+                self.state = 'game'
+        elif self.state == 'game':
+            if key == arcade.key.W:
+                self.bobby.switch_direction(Bobby.DIR_UP)
+            elif key == arcade.key.S:
+                self.bobby.switch_direction(Bobby.DIR_DOWN)
+            elif key == arcade.key.A:
+                self.bobby.switch_direction(Bobby.DIR_LEFT)
+            elif key == arcade.key.D:
+                self.bobby.switch_direction(Bobby.DIR_RIGHT)
 
     def on_key_release(self, key, key_modifiers):
-        if key == arcade.key.W or key == arcade.key.S or key == arcade.key.A or key == arcade.key.D:
-            self.bobby.switch_direction(Bobby.DIR_STILL)
+        if self.state == 'game':
+            if key == arcade.key.W or key == arcade.key.S or key == arcade.key.A or key == arcade.key.D:
+                self.bobby.switch_direction(Bobby.DIR_STILL)
 
 class Bobby:
     DIR_STILL = 0
