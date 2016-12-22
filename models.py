@@ -1,4 +1,5 @@
 import arcade
+import math
 
 class World:
     def __init__(self, width, height):
@@ -6,14 +7,20 @@ class World:
         self.height = height
         self.state = 'start'
         self.score = 0
+        self.count_score = 5
         self.bobby = Bobby(self, 100, 100)
+        self.barrow = Barrow(self, 400, 300)
         self.floor = Floor(self, 400, 300)
         self.fog = Fog(self, 100, 100)
         self.bookshelf = Bookshelf(self, 500, 300)
 
     def animate(self, delta):
         self.bobby.animate(delta)
+        self.barrow.animate(delta)
         self.fog.animate(delta)
+        if self.score == self.count_score:
+            self.state = 'over'
+            self.score = 0
 
     def on_key_press(self, key, key_modifiers):
         if self.state == 'start':
@@ -28,6 +35,9 @@ class World:
                 self.bobby.switch_direction(Bobby.DIR_LEFT)
             elif key == arcade.key.D:
                 self.bobby.switch_direction(Bobby.DIR_RIGHT)
+        elif self.state == 'over':
+            if key == arcade.key.SPACE:
+                self.state = 'start'
 
     def on_key_release(self, key, key_modifiers):
         if self.state == 'game':
@@ -55,13 +65,32 @@ class Bobby:
 
     def animate(self, delta):
         if self.direction == Bobby.DIR_UP and self.y < 600:
-            self.y = self.y + self.speed
+            self.y += self.speed
         elif self.direction == Bobby.DIR_DOWN and self.y > 0:
-            self.y = self.y - self.speed
+            self.y -= self.speed
         elif self.direction == Bobby.DIR_LEFT and self.x > 0:
-            self.x = self.x - self.speed
+            self.x -= self.speed
         elif self.direction == Bobby.DIR_RIGHT and self.x < 800:
-            self.x = self.x + self.speed
+            self.x += self.speed
+
+class Barrow:
+
+    def __init__(self, world, x, y):
+        self.world = world
+        self.x = x
+        self.y = y
+        self.speed = 1
+        self.angle = 0
+
+    def animate(self, delta):
+        self.dx = self.world.bobby.x - self.x
+        self.dy = self.world.bobby.y - self.y
+        self.dist = math.hypot(self.dx, self.dy)
+        self.dx = self.dx / self.dist
+        self.dy = self.dy / self.dist
+        if self.dist <= 150:
+            self.x += self.dx * self.speed
+            self.y += self.dy * self.speed
 
 class Floor:
 
