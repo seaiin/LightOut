@@ -8,6 +8,7 @@ class World:
         self.state = 'start'
         self.score = 0
         self.count_score = 5
+        self.door_count = 8
         self.door_open = False
         self.bobby = Bobby(self, 200, 500)
         self.barrow = Barrow(self, 400, 300)

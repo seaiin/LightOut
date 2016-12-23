@@ -1,5 +1,5 @@
 import arcade
-import random
+from random import randint
 from models import World, Bobby
 
 SCREEN_WIDTH = 800
@@ -38,8 +38,10 @@ class LightOutWindow(arcade.Window):
         self.key_icon_sprite.center_x = 50
         self.key_icon_sprite.center_y = 550
         self.key_sprite_list = arcade.SpriteList()
-        self.door_sprite_list = arcade.SpriteList()
         self.crete_key()
+        self.door_close_sprite_list = arcade.SpriteList()
+        self.door_open_sprite_list = arcade.SpriteList()
+        self.crete_door()
         self.bobby_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.bobby)
         self.bobby_dead_sprite = ModelSprite('images/bobby_dead.png', model=self.world.bobby)
         self.floor_sprite = ModelSprite('images/floor.png', model=self.world.floor)
@@ -58,6 +60,10 @@ class LightOutWindow(arcade.Window):
         elif self.world.state == 'game':
             self.floor_sprite.draw()
             self.bookshelf_sprite.draw()
+            if self.world.door_open:
+                self.door_open_sprite_list.draw()
+            else:
+                self.door_close_sprite_list.draw()
             if arcade.check_for_collision(self.bobby_sprite, self.barrow_sprite):
                 self.bobby_dead_sprite.draw()
             else:
@@ -88,6 +94,43 @@ class LightOutWindow(arcade.Window):
             key.center_x = self.key_x[i]
             key.center_y = self.key_y[i]
             self.key_sprite_list.append(key)
+
+    def crete_door(self):
+        self.door_x = []
+        self.door_y = []
+        for i in range(self.world.door_count):
+            self.door_x.append(randint(50,750))
+            self.door_y.append(randint(50,550))
+        for i in range(int(self.world.door_count/2)):
+            door_close = arcade.Sprite('images/door_close.png', 1)
+            door_open = arcade.Sprite('images/door_open.png', 1)
+            if i <= 1:
+                door_close.center_x = self.door_x[i]
+                door_close.center_y = 16
+                door_open.center_x = self.door_x[i]
+                door_open.center_y = 16
+            if i > 1:
+                door_close.center_x = self.door_x[i]
+                door_close.center_y = 584
+                door_open.center_x = self.door_x[i]
+                door_open.center_y = 584
+            self.door_close_sprite_list.append(door_close)
+            self.door_open_sprite_list.append(door_open)
+        for i in range(int(self.world.door_count/2)):
+            door_close = arcade.Sprite('images/door_close.png', 1)
+            door_open = arcade.Sprite('images/door_open.png', 1)
+            if i <= 1:
+                door_close.center_x = 20
+                door_close.center_y = self.door_y[i]
+                door_open.center_x = 20
+                door_open.center_y = self.door_y[i]
+            if i > 1:
+                door_close.center_x = 780
+                door_close.center_y = self.door_y[i]
+                door_open.center_x = 780
+                door_open.center_y = self.door_y[i]
+            self.door_close_sprite_list.append(door_close)
+            self.door_open_sprite_list.append(door_open)
 
     def touch_key(self):
         for key in self.key_sprite_list:
