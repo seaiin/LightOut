@@ -58,6 +58,7 @@ class Bobby:
         self.speed = 2
         self.angle = 0
         self.touch_obj = True
+        self.touch_barrow = False
         self.direction = Bobby.DIR_STILL
 
     def switch_direction(self, direc):

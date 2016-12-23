@@ -39,6 +39,7 @@ class LightOutWindow(arcade.Window):
         self.key_sprite_list = arcade.SpriteList()
         self.crete_key()
         self.bobby_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.bobby)
+        self.bobby_dead_sprite = ModelSprite('images/bobby_dead.png', model=self.world.bobby)
         self.floor_sprite = ModelSprite('images/floor.png', model=self.world.floor)
         self.fog_sprite = ModelSprite('images/fog.png', model=self.world.fog)
         self.bookshelf_sprite = ModelSprite('images/bookshelf.png', model=self.world.bookshelf)
@@ -55,7 +56,10 @@ class LightOutWindow(arcade.Window):
         elif self.world.state == 'game':
             self.floor_sprite.draw()
             self.bookshelf_sprite.draw()
-            self.bobby_sprite.draw()
+            if self.world.bobby.touch_barrow:
+                self.bobby_dead_sprite.draw()
+            else:
+                self.bobby_sprite.draw()
             self.barrow_sprite.draw()
             self.key_sprite_list.draw()
             self.fog_sprite.draw()
@@ -66,6 +70,7 @@ class LightOutWindow(arcade.Window):
         if self.world.state == 'game':
             self.world.animate(delta)
             self.touch_key()
+            self.touch_barrow()
             self.time = self.time + delta
 
     def on_key_press(self, key, key_modifiers):
@@ -88,6 +93,9 @@ class LightOutWindow(arcade.Window):
             if arcade.check_for_collision(self.bobby_sprite, key):
                 key.kill()
                 self.world.score = self.world.score + 1
+    def touch_barrow(self):
+        if arcade.check_for_collision(self.bobby_sprite, self.barrow_sprite):
+            self.world.bobby.touch_barrow = True
 
 if __name__ == '__main__':
     window = LightOutWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
