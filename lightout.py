@@ -1,4 +1,5 @@
 import arcade
+import random
 from models import World, Bobby
 
 SCREEN_WIDTH = 800
@@ -37,6 +38,7 @@ class LightOutWindow(arcade.Window):
         self.key_icon_sprite.center_x = 50
         self.key_icon_sprite.center_y = 550
         self.key_sprite_list = arcade.SpriteList()
+        self.door_sprite_list = arcade.SpriteList()
         self.crete_key()
         self.bobby_sprite = ModelSprite('images/bobby_face_still.png', model=self.world.bobby)
         self.bobby_dead_sprite = ModelSprite('images/bobby_dead.png', model=self.world.bobby)
@@ -56,12 +58,12 @@ class LightOutWindow(arcade.Window):
         elif self.world.state == 'game':
             self.floor_sprite.draw()
             self.bookshelf_sprite.draw()
-            if self.world.bobby.touch_barrow:
+            if arcade.check_for_collision(self.bobby_sprite, self.barrow_sprite):
                 self.bobby_dead_sprite.draw()
             else:
                 self.bobby_sprite.draw()
-            self.barrow_sprite.draw()
             self.key_sprite_list.draw()
+            self.barrow_sprite.draw()
             self.fog_sprite.draw()
             self.key_icon_sprite.draw()
             arcade.draw_text(str(self.world.score) + " / " + str(self.world.count_score), 75, 545, arcade.color.WHITE, 15)
@@ -70,7 +72,6 @@ class LightOutWindow(arcade.Window):
         if self.world.state == 'game':
             self.world.animate(delta)
             self.touch_key()
-            self.touch_barrow()
             self.time = self.time + delta
 
     def on_key_press(self, key, key_modifiers):
@@ -93,9 +94,6 @@ class LightOutWindow(arcade.Window):
             if arcade.check_for_collision(self.bobby_sprite, key):
                 key.kill()
                 self.world.score = self.world.score + 1
-    def touch_barrow(self):
-        if arcade.check_for_collision(self.bobby_sprite, self.barrow_sprite):
-            self.world.bobby.touch_barrow = True
 
 if __name__ == '__main__':
     window = LightOutWindow(SCREEN_WIDTH, SCREEN_HEIGHT)

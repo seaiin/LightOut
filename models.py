@@ -8,7 +8,8 @@ class World:
         self.state = 'start'
         self.score = 0
         self.count_score = 5
-        self.bobby = Bobby(self, 100, 100)
+        self.door_open = False
+        self.bobby = Bobby(self, 200, 500)
         self.barrow = Barrow(self, 400, 300)
         self.floor = Floor(self, 400, 300)
         self.fog = Fog(self, 100, 100)
@@ -18,7 +19,7 @@ class World:
         self.bobby.animate(delta)
         self.barrow.animate(delta)
         self.fog.animate(delta)
-        if self.score == self.count_score:
+        if self.score == self.count_score or self.bobby.touch_barrow:
             self.state = 'over'
             self.score = 0
 
@@ -57,7 +58,7 @@ class Bobby:
         self.y = y
         self.speed = 2
         self.angle = 0
-        self.touch_obj = True
+        self.touch_obj = False
         self.touch_barrow = False
         self.direction = Bobby.DIR_STILL
 
@@ -65,14 +66,17 @@ class Bobby:
         self.direction = direc
 
     def animate(self, delta):
-        if self.direction == Bobby.DIR_UP and self.y < 600:
-            self.y += self.speed
-        elif self.direction == Bobby.DIR_DOWN and self.y > 0:
-            self.y -= self.speed
-        elif self.direction == Bobby.DIR_LEFT and self.x > 0:
-            self.x -= self.speed
-        elif self.direction == Bobby.DIR_RIGHT and self.x < 800:
-            self.x += self.speed
+        if self.touch_barrow:
+            self.direction = self.DIR_STILL
+        else:
+            if self.direction == Bobby.DIR_UP and self.y < 600:
+                self.y += self.speed
+            elif self.direction == Bobby.DIR_DOWN and self.y > 0:
+                self.y -= self.speed
+            elif self.direction == Bobby.DIR_LEFT and self.x > 0:
+                self.x -= self.speed
+            elif self.direction == Bobby.DIR_RIGHT and self.x < 800:
+                self.x += self.speed
 
 class Barrow:
 
@@ -80,7 +84,7 @@ class Barrow:
         self.world = world
         self.x = x
         self.y = y
-        self.speed = 1
+        self.speed = 2
         self.angle = 0
 
     def animate(self, delta):
