@@ -20,7 +20,9 @@ class World:
         self.bobby.animate(delta)
         self.barrow.animate(delta)
         self.fog.animate(delta)
-        if self.score == self.count_score or self.bobby.touch_barrow:
+        if self.score == self.count_score:
+            self.door_open = True
+        if self.bobby.touch_barrow or self.bobby.touch_door:
             self.state = 'over'
             self.score = 0
 
@@ -61,6 +63,7 @@ class Bobby:
         self.angle = 0
         self.touch_obj = False
         self.touch_barrow = False
+        self.touch_door = False
         self.direction = Bobby.DIR_STILL
 
     def switch_direction(self, direc):
@@ -85,7 +88,7 @@ class Barrow:
         self.world = world
         self.x = x
         self.y = y
-        self.speed = 2
+        self.speed = 1
         self.angle = 0
 
     def animate(self, delta):

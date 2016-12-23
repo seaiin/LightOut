@@ -78,6 +78,7 @@ class LightOutWindow(arcade.Window):
         if self.world.state == 'game':
             self.world.animate(delta)
             self.touch_key()
+            self.touch_door()
             self.time = self.time + delta
 
     def on_key_press(self, key, key_modifiers):
@@ -137,6 +138,11 @@ class LightOutWindow(arcade.Window):
             if arcade.check_for_collision(self.bobby_sprite, key):
                 key.kill()
                 self.world.score = self.world.score + 1
+
+    def touch_door(self):
+        for door in self.door_open_sprite_list:
+            if arcade.check_for_collision(self.bobby_sprite, door) and self.world.door_open:
+                self.world.bobby.touch_door = True
 
 if __name__ == '__main__':
     window = LightOutWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
