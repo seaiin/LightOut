@@ -1,5 +1,6 @@
 import arcade
 import math
+from random import randint
 
 class World:
     def __init__(self, width, height):
@@ -8,24 +9,26 @@ class World:
         self.state = 'start'
         self.score = 0
         self.start_time = 0
-        self.count_score = 5
+        self.count_score = 10
         self.door_count = 8
         self.door_open = False
-        self.bobby = Bobby(self, 200, 500)
-        self.barrow = Barrow(self, 400, 300)
+        self.bobby = Bobby(self, randint(50, 750), randint(50, 550))
+        self.barrow1 = Barrow(self, randint(50, 750), randint(50, 550))
+        self.barrow2 = Barrow(self, randint(50, 750), randint(50, 550))
         self.floor = Floor(self, 400, 300)
-        self.fog = Fog(self, 100, 100)
+        self.fog = Fog(self, self.bobby.x, self.bobby.y)
         self.bookshelf = Bookshelf(self, 500, 300)
 
     def animate(self, delta):
         self.bobby.animate(delta)
-        self.barrow.animate(delta)
+        self.barrow1.animate(delta)
+        self.barrow2.animate(delta)
         self.fog.animate(delta)
         if self.score == self.count_score:
             self.door_open = True
-        if self.bobby.touch_barrow or self.bobby.touch_door:
-            self.state = 'over'
-            self.score = 0
+        # if self.bobby.touch_barrow or self.bobby.touch_door:
+            # self.state = 'over'
+            # self.score = 0
 
     def on_key_press(self, key, key_modifiers):
         if self.state == 'start':
@@ -89,7 +92,7 @@ class Barrow:
         self.world = world
         self.x = x
         self.y = y
-        self.speed = 1
+        self.speed = 1.25
         self.angle = 0
 
     def animate(self, delta):
@@ -98,7 +101,7 @@ class Barrow:
         self.dist = math.hypot(self.dx, self.dy)
         self.dx = self.dx / self.dist
         self.dy = self.dy / self.dist
-        if self.dist <= 150:
+        if self.dist <= 175:
             self.x += self.dx * self.speed
             self.y += self.dy * self.speed
 

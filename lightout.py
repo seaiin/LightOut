@@ -47,7 +47,8 @@ class LightOutWindow(arcade.Window):
         self.floor_sprite = ModelSprite('images/floor.png', model=self.world.floor)
         self.fog_sprite = ModelSprite('images/fog.png', model=self.world.fog)
         self.bookshelf_sprite = ModelSprite('images/bookshelf.png', model=self.world.bookshelf)
-        self.barrow_sprite = ModelSprite('images/barrow.png', model=self.world.barrow)
+        self.barrow1_sprite = ModelSprite('images/barrow.png', model=self.world.barrow1)
+        self.barrow2_sprite = ModelSprite('images/barrow.png', model=self.world.barrow2)
 
     def on_draw(self):
         arcade.start_render()
@@ -69,19 +70,20 @@ class LightOutWindow(arcade.Window):
             else:
                 self.bobby_sprite.draw()
             self.key_sprite_list.draw()
-            self.barrow_sprite.draw()
+            self.barrow1_sprite.draw()
+            self.barrow2_sprite.draw()
             self.fog_sprite.draw()
             self.key_icon_sprite.draw()
             arcade.draw_text(str(self.world.score) + " / " + str(self.world.count_score), 75, 545, arcade.color.WHITE, 15)
 
     def animate(self, delta):
+        self.time += delta
         if self.world.state == 'game':
             self.world.start_time += delta
             self.world.animate(delta)
             self.touch_key()
             self.touch_door()
             self.touch_barrow()
-            self.time = self.time + delta
 
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
@@ -90,20 +92,18 @@ class LightOutWindow(arcade.Window):
         self.world.on_key_release(key, key_modifiers)
 
     def crete_key(self):
-        self.key_x = [100, 100, 450, 300, 700]
-        self.key_y = [399, 400, 200, 250, 100]
         for i in range(self.world.count_score):
             key = arcade.Sprite('images/key.png', 1)
-            key.center_x = self.key_x[i]
-            key.center_y = self.key_y[i]
+            key.center_x = randint(50, 750)
+            key.center_y = randint(50, 550)
             self.key_sprite_list.append(key)
 
     def crete_door(self):
         self.door_x = []
         self.door_y = []
         for i in range(self.world.door_count):
-            self.door_x.append(randint(50,750))
-            self.door_y.append(randint(50,550))
+            self.door_x.append(randint(50, 750))
+            self.door_y.append(randint(50, 550))
         for i in range(int(self.world.door_count/2)):
             door_close = arcade.Sprite('images/door_close.png', 1)
             door_open = arcade.Sprite('images/door_open.png', 1)
@@ -147,8 +147,9 @@ class LightOutWindow(arcade.Window):
                 self.world.bobby.touch_door = True
 
     def touch_barrow(self):
-        if arcade.check_for_collision(self.bobby_sprite, self.barrow_sprite) and self.world.start_time >= 3:
-            self.world.bobby.touch_barrow = True
+        if arcade.check_for_collision(self.bobby_sprite, self.barrow1_sprite) or arcade.check_for_collision(self.bobby_sprite, self.barrow2_sprite):
+            if self.world.start_time >= 3:
+                self.world.bobby.touch_barrow = True
 
 if __name__ == '__main__':
     window = LightOutWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
