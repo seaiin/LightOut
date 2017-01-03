@@ -60,7 +60,7 @@ class LightOutWindow(arcade.Window):
                 self.time = 0
         elif self.world.state == 'game':
             self.floor_sprite.draw()
-            self.bookshelf_sprite.draw()
+            # self.bookshelf_sprite.draw()
             if self.world.door_open:
                 self.door_open_sprite_list.draw()
             else:
@@ -88,8 +88,8 @@ class LightOutWindow(arcade.Window):
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
 
-    def on_key_release(self, key, key_modifiers):
-        self.world.on_key_release(key, key_modifiers)
+    # def on_key_release(self, key, key_modifiers):
+        # self.world.on_key_release(key, key_modifiers)
 
     def crete_key(self):
         for i in range(self.world.count_score):

@@ -9,7 +9,7 @@ class World:
         self.state = 'start'
         self.score = 0
         self.start_time = 0
-        self.count_score = 10
+        self.count_score = 5
         self.door_count = 8
         self.door_open = False
         self.bobby = Bobby(self, randint(50, 750), randint(50, 550))
@@ -26,9 +26,9 @@ class World:
         self.fog.animate(delta)
         if self.score == self.count_score:
             self.door_open = True
-        # if self.bobby.touch_barrow or self.bobby.touch_door:
-            # self.state = 'over'
-            # self.score = 0
+        if self.bobby.touch_barrow or self.bobby.touch_door:
+            self.bobby.direction = Bobby.DIR_STILL
+            self.score = 0
 
     def on_key_press(self, key, key_modifiers):
         if self.state == 'start':
@@ -47,10 +47,10 @@ class World:
             if key == arcade.key.SPACE:
                 self.state = 'start'
 
-    def on_key_release(self, key, key_modifiers):
-        if self.state == 'game':
-            if key == arcade.key.W or key == arcade.key.S or key == arcade.key.A or key == arcade.key.D:
-                self.bobby.switch_direction(Bobby.DIR_STILL)
+    # def on_key_release(self, key, key_modifiers):
+        # if self.state == 'game':
+            # if key == arcade.key.W or key == arcade.key.S or key == arcade.key.A or key == arcade.key.D:
+                # self.bobby.switch_direction(Bobby.DIR_STILL)
 
 class Bobby:
     DIR_STILL = 0
@@ -63,7 +63,7 @@ class Bobby:
         self.world = World
         self.x = x
         self.y = y
-        self.speed = 2
+        self.speed = 2.5
         self.angle = 0
         self.touch_obj = False
         self.touch_barrow = False
@@ -101,7 +101,7 @@ class Barrow:
         self.dist = math.hypot(self.dx, self.dy)
         self.dx = self.dx / self.dist
         self.dy = self.dy / self.dist
-        if self.dist <= 175:
+        if self.dist <= 400:
             self.x += self.dx * self.speed
             self.y += self.dy * self.speed
 
