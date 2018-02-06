@@ -2,8 +2,8 @@
 
 ### Requirement
 
-* [Python 2.x.x] or [Python 3.x.x]
-* [The Python Arcade Library] (http://arcade.academy/index.html)
+* Python 2.x.x or Python 3.x.x
+* [The Python Arcade Library](http://arcade.academy/index.html)
 
 ### How to run
 
