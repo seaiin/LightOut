@@ -19,11 +19,11 @@ class World:
         self.fog = Fog(self, self.bobby.x, self.bobby.y)
         self.bookshelf = Bookshelf(self, 500, 300)
 
-    def animate(self, delta):
-        self.bobby.animate(delta)
-        self.barrow1.animate(delta)
-        self.barrow2.animate(delta)
-        self.fog.animate(delta)
+    def update(self, delta):
+        self.bobby.update(delta)
+        self.barrow1.update(delta)
+        self.barrow2.update(delta)
+        self.fog.update(delta)
         if self.score == self.count_score:
             self.door_open = True
         if self.bobby.touch_barrow or self.bobby.touch_door:
@@ -73,7 +73,7 @@ class Bobby:
     def switch_direction(self, direc):
         self.direction = direc
 
-    def animate(self, delta):
+    def update(self, delta):
         if self.touch_barrow:
             self.direction = self.DIR_STILL
         else:
@@ -95,7 +95,7 @@ class Barrow:
         self.speed = 1.25
         self.angle = 0
 
-    def animate(self, delta):
+    def update(self, delta):
         self.dx = self.world.bobby.x - self.x
         self.dy = self.world.bobby.y - self.y
         self.dist = math.hypot(self.dx, self.dy)
@@ -130,6 +130,6 @@ class Fog:
         self.y = self.bobby.y
         self.angle = 0
 
-    def animate(self, delta):
+    def update(self, delta):
         self.x = self.bobby.x
         self.y = self.bobby.y

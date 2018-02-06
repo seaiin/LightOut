@@ -76,11 +76,11 @@ class LightOutWindow(arcade.Window):
             self.key_icon_sprite.draw()
             arcade.draw_text(str(self.world.score) + " / " + str(self.world.count_score), 75, 545, arcade.color.WHITE, 15)
 
-    def animate(self, delta):
+    def update(self, delta):
         self.time += delta
         if self.world.state == 'game':
             self.world.start_time += delta
-            self.world.animate(delta)
+            self.world.update(delta)
             self.touch_key()
             self.touch_door()
             self.touch_barrow()
